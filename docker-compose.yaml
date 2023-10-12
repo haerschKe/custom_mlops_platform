@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  
+  ### mlflow stuff ###
+  db:
+    image: postgres:13
+    container_name: postgres_mlflow
+    restart: always
+    environment:
+      POSTGRES_DB: mlflow
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - datapg_vol:/var/lib/postgresql/data
+  
+  mlflow:
+    build: ./mlflow
+    image: mlflow_img
+    container_name: mlflow
+    expose:
+      - 5000
+    ports:
+      - "4999:5000"
+    depends_on:
+      - db
+    volumes:
+      - mlflow_vol:/mlflow/storage/
+    command: "mlflow server 
+              --host 0.0.0.0
+              --backend-store-uri postgresql://admin:secret@db:5432/mlflow 
+              --default-artifact-root /mlflow/storage/"
+
+  ### airflow stuff ###
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  webserver:
+    image: puckel/docker-airflow:1.10.9
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      # - ./plugins:/usr/local/airflow/plugins
+    ports:
+      - "8080:8080"
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+  
+  redis: # to store airflow logs
+    image: redis:6.2.2
+
+volumes:
+  mlflow_vol:
+  datapg_vol:
