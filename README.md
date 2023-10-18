@@ -1,12 +1,6 @@
 # CUSTOM MLOPS PLATFORM
+**Simple MLOps platform with MLFlow, Airflow and Grafana/Prometheus.**
 
-Example Model + DVC Handling:
-DVC Sample/Tutorial (+ DVC Pipeline):
-https://realpython.com/python-data-version-control/
-https://github.com/realpython/data-version-control/tree/master
-
-MLOPS Platform:
-MLFlow + Airflow + Prometheus/Grafana
 
 Each component has a separate subfolder with its code and configuration. In **example_model_dvc** is an example of an SGD Classifier with Imagenette160 dataset and DVC handling (with local remote storage).
 
@@ -21,7 +15,7 @@ There is an custom Airflow Dockerfile which is used for the compose stuff. The D
 Go to the project root directory.
 
 Start MLFow: 
-docker-compose -f docker-compose.yaml up -d
+docker-compose -f mlflow/docker-compose.yaml up -d
 
 Start Airflow: docker-compose -f airflow_docker/docker-compose-airflow.yaml up -d
 
