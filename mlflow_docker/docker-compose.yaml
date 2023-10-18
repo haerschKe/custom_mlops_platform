@@ -19,7 +19,7 @@ services:
       - mlops_platform
   
   mlflow:
-    build: ./mlflow
+    build: ./mlflow_docker
     image: mlflow_img
     container_name: mlflow
     expose:

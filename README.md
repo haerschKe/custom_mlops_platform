@@ -15,7 +15,7 @@ There is an custom Airflow Dockerfile which is used for the compose stuff. The D
 Go to the project root directory.
 
 Start MLFow: 
-docker-compose -f mlflow/docker-compose.yaml up -d
+docker-compose -f mlflow_docker/docker-compose.yaml up -d
 
 Start Airflow: docker-compose -f airflow_docker/docker-compose-airflow.yaml up -d
 
