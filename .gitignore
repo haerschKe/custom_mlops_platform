@@ -1,6 +1,9 @@
 # custom/project specific stuff
 notes.md
 overview_components.png
+airflow_docker/plugins/
+airflow_docker/logs/
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
